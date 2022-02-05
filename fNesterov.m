@@ -1,9 +1,9 @@
-function xdot = f(x)
+function xdot = fNesterov(x)
 %--------------------------------------------------------------------------
 % Matlab M-file Project: HyEQ Toolbox @  Hybrid Systems Laboratory (HSL), 
 % https://hybrid.soe.ucsc.edu/software
 % http://hybridsimulator.wordpress.com/
-% Filename: f.m
+% Filename: fNesterov.m
 %--------------------------------------------------------------------------
 % Project: Uniting Nesterov's accelerated gradient descent globally with
 % heavy ball locally.
@@ -15,18 +15,18 @@ function xdot = f(x)
 %   Revision: 0.0.0.3 Date: 09/29/2020 1:07:00
    
 % The global variables
-global c 
+global M zeta
 
 % state
 z1 = x(1);
 z2 = x(2);
-tau = x(3);
+q = x(3);
+tau = x(4);
 
-% z1dot = z2;
-% z2dot = -(3/tau)*z2 - 4*c*GradientL(z1);
+dBar = 3/(2*(tau + 2));
+betaBar = (tau - 1)/(tau + 2);
+ 
+u = - 2*dBar*z2 - (zeta^2/(M))*GradientL(z1 + betaBar*z2); 
 
-z1dot = (2/tau)*(z2 - z1);
-z2dot = -2*c*tau*GradientL(z1);
-
-xdot = [z1dot;z2dot;1]; 
+xdot = [z2;u;0;1]; 
 end
